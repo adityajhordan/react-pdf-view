@@ -1,25 +1,39 @@
-import logo from './logo.svg';
+import { Document, Page, pdfjs } from 'react-pdf/dist/esm/entry.webpack';
+import { useEffect, useState } from "react";
 import './App.css';
+import { mock3 } from "./data";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+const App = ()=>{
+
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  useEffect(() => {
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+  }, []);
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
+  return(
+    <div>
+      <Document
+        file={`data:application/pdf;base64,${mock3}`}
+        onLoadSuccess={onDocumentLoadSuccess}
+      >
+        {/* <Page pageNumber={pageNumber} /> */}
+        {Array.apply(null, Array(numPages))
+          .map((x, i) => i + 1)
+          .map((page) => (
+            <Page pageNumber={page} />
+          ))}
+      </Document>
+      <p>
+        Page {pageNumber} of {numPages}
+      </p>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
