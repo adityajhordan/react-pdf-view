@@ -1,4 +1,4 @@
-import { Document, Page, pdfjs } from 'react-pdf/dist/esm/entry.webpack';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { useEffect, useState } from "react";
 import './App.css';
 import { mock3 } from "./data";
